@@ -1,4 +1,3 @@
-import React from "react";
 import { FlatList, StyleSheet, Text, View } from "react-native";
 import { useMapStore } from "../../store/map.store";
 import type { DataTypeOfMarkers } from "../../types/type";
@@ -7,7 +6,7 @@ import CardOfMarkers from "../CardOfMarkers";
 export default function ListOfMarkers() {
 	const { markers } = useMapStore();
 
-	if (markers.length === 0) {
+	if (!markers || markers.length === 0) {
 		return (
 			<View style={[styles.container, styles.emptyContainer]}>
 				<View>

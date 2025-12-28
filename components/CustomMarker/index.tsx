@@ -6,7 +6,6 @@ import {
 	useRoute,
 } from "@react-navigation/native";
 import * as ImagePicker from "expo-image-picker";
-import React from "react";
 import { Controller, useForm } from "react-hook-form";
 import {
 	Alert,
@@ -86,9 +85,12 @@ const CustomMarker = () => {
 				throw error;
 			}
 
+			// Set the ID from the database response
+			const markerWithId = { ...newMarker, id: markerId[0].id };
+
 			await sendDataToN8N({ data: { markerId: markerId[0].id, userId } });
 
-			addMarkers(newMarker);
+			addMarkers(markerWithId);
 			navigation.goBack();
 			Alert.alert("Success", "Marker created successfully!");
 			reset();

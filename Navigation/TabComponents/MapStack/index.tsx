@@ -81,7 +81,7 @@ export default function MapStack() {
 	const mockDataMarkers = useMemo(() => {
 		return {
 			type: "FeatureCollection",
-			features: markers.map((item) => ({
+			features: (markers || []).map((item) => ({
 				type: "Feature",
 				geometry: {
 					type: "Point",
@@ -291,7 +291,7 @@ export default function MapStack() {
 
 				{selectedMarkerId &&
 					(() => {
-						const selectedMarker = markers.find(
+						const selectedMarker = (markers || []).find(
 							(m) => m.id === selectedMarkerId?.toString(),
 						);
 

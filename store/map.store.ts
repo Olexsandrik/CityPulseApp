@@ -1,5 +1,6 @@
 import { create } from "zustand";
 import { getDirections } from "../api/direction";
+import supabase from "../api/supabase/supabase";
 import type { DataTypeOfMarkers } from "../types/type";
 
 type Coordinates = [number, number];
@@ -33,6 +34,7 @@ interface MapState {
 	addMarkers: (marker: DataTypeOfMarkers) => void;
 	clearError: () => void;
 	removeMarker: (marker: DataTypeOfMarkers) => void;
+	refreshMarkers: () => Promise<void>;
 }
 
 export const useMapStore = create<MapState>((set, get) => ({
@@ -45,9 +47,9 @@ export const useMapStore = create<MapState>((set, get) => ({
 	markers: [],
 
 	removeMarker: (marker: DataTypeOfMarkers) => {
-		const markers = get().markers as DataTypeOfMarkers[];
+		const markers = get().markers || [];
 		const result = markers.filter((m) => m.id !== marker.id);
-		set({ markers: result as DataTypeOfMarkers[] });
+		set({ markers: result });
 	},
 
 	setUserLocation: (coords: Coordinates) => set({ userLocation: coords }),
@@ -59,9 +61,9 @@ export const useMapStore = create<MapState>((set, get) => ({
 	},
 
 	addMarkers: (marker: DataTypeOfMarkers) => {
-		const markers = get().markers as DataTypeOfMarkers[];
+		const markers = get().markers || [];
 
-		const result = [...markers, marker] as DataTypeOfMarkers[];
+		const result = [...markers, marker];
 
 		set({
 			markers: result,
@@ -94,4 +96,17 @@ export const useMapStore = create<MapState>((set, get) => ({
 	clearDataDirections: () => set({ dataDirections: null }),
 	clearUserLocation: () => set({ userLocation: null }),
 	clearError: () => set({ error: null }),
+
+	refreshMarkers: async () => {
+		try {
+			const { data, error } = await supabase.from("markers").select("*");
+			if (error) {
+				console.error("Error refreshing markers:", error);
+				return;
+			}
+			set({ markers: data || [] });
+		} catch (error) {
+			console.error("Failed to refresh markers:", error);
+		}
+	},
 }));

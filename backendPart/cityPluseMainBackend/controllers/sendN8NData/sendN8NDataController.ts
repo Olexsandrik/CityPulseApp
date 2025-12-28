@@ -10,7 +10,7 @@ export const sendN8NDataController = {
 			}
 
 			const response = await fetch(
-				"http://localhost:5678/webhook-test/30e16805-1f4f-4bc6-b4db-08ae6ba3595a",
+				"https://oleksandrikweb1209.app.n8n.cloud/webhook/30e16805-1f4f-4bc6-b4db-08ae6ba3595a",
 				{
 					method: "POST",
 					body: JSON.stringify({ data }),
