@@ -1,28 +1,29 @@
 import { create } from "zustand";
 import { getDirections } from "../api/direction";
 import supabase from "../api/supabase/supabase";
-import type { DataTypeOfMarkers } from "../types/type";
+import type {
+	DataTypeOfMarkers,
+	Coordinates,
+	RouteData,
+	ListState,
+	MarkerFilter
+} from "../types/type";
 
-type Coordinates = [number, number];
+// Union Types для стану карти
+type MapError =
+	| { type: 'network'; message: string }
+	| { type: 'location'; message: string }
+	| { type: 'api'; status: number; message: string };
 
-interface RouteData {
-	routes?: Array<{
-		geometry: {
-			coordinates: Coordinates[];
-		};
-		duration: number;
-		distance: number;
-	}>;
-}
-
-interface MapState {
+// Generic interface для map state
+interface MapState extends ListState<DataTypeOfMarkers> {
 	userLocation: Coordinates | null;
 	selectedCategory: Coordinates | null;
 	dataDirections: RouteData | null;
 	isLoadingRoute: boolean;
-	error: string | null;
-	markers: DataTypeOfMarkers[];
+	filters: MarkerFilter;
 
+	// Actions
 	setUserLocation: (coords: Coordinates) => void;
 	setMarkers: (markers: DataTypeOfMarkers[]) => void;
 	setSelectedCategory: (coords: Coordinates) => void;
@@ -35,6 +36,7 @@ interface MapState {
 	clearError: () => void;
 	removeMarker: (marker: DataTypeOfMarkers) => void;
 	refreshMarkers: () => Promise<void>;
+	setFilters: (filters: MarkerFilter) => void;
 }
 
 export const useMapStore = create<MapState>((set, get) => ({
@@ -44,7 +46,15 @@ export const useMapStore = create<MapState>((set, get) => ({
 	isLoadingRoute: false,
 	error: null,
 
+	// ListState implementation
+	items: [],
+	isLoading: false,
+	hasMore: false,
+	total: 0,
+
+	// Map specific
 	markers: [],
+	filters: { type: 'all' },
 
 	removeMarker: (marker: DataTypeOfMarkers) => {
 		const markers = get().markers || [];
@@ -104,9 +114,14 @@ export const useMapStore = create<MapState>((set, get) => ({
 				console.error("Error refreshing markers:", error);
 				return;
 			}
-			set({ markers: data || [] });
+			set({ markers: data || [], items: data || [] });
 		} catch (error) {
 			console.error("Failed to refresh markers:", error);
 		}
+	},
+
+	setFilters: (filters: MarkerFilter) => {
+		set({ filters });
+		// Можна додати логіку для фільтрації існуючих маркерів
 	},
 }));
