@@ -1,5 +1,5 @@
 {
-	"name": "cityPluseMainBackend",
+	"name": "cityplusemainbackend",
 	"version": "0.0.0",
 	"scripts": {
 		"build": "ts-node ./scripts/build.ts",
@@ -16,6 +16,8 @@
 		"node": ">=16.0.0"
 	},
 	"dependencies": {
+		"@prisma/adapter-pg": "^7.2.0",
+		"@prisma/client": "^6.19.1",
 		"cookie-parser": "^1.4.7",
 		"dayjs": "^1.11.19",
 		"dotenv": "^17.2.3",
@@ -27,7 +29,8 @@
 		"jet-validators": "^1.6.5",
 		"jsonfile": "^6.2.0",
 		"module-alias": "^2.2.3",
-		"morgan": "^1.10.1"
+		"morgan": "^1.10.1",
+		"pg": "^8.16.3"
 	},
 	"devDependencies": {
 		"@eslint/js": "^9.39.2",
@@ -40,6 +43,7 @@
 		"@types/module-alias": "^2.0.4",
 		"@types/morgan": "^1.9.10",
 		"@types/node": "^25.0.3",
+		"@types/pg": "^8.16.0",
 		"@types/supertest": "^6.0.3",
 		"eslint": "^9.39.2",
 		"eslint-plugin-n": "^17.23.1",
@@ -47,11 +51,22 @@
 		"fs-extra": "^11.3.3",
 		"jiti": "^2.6.1",
 		"nodemon": "^3.1.11",
+		"prisma": "^6.19.1",
 		"supertest": "^7.1.4",
 		"ts-node": "^10.9.2",
 		"tsconfig-paths": "^4.2.0",
+		"tsx": "^4.21.0",
 		"typescript": "^5.9.3",
 		"typescript-eslint": "^8.50.1",
 		"vitest": "^3.2.4"
-	}
+	},
+	"description": "This project was created with [express-generator-typescript](https://github.com/seanpmaxwell/express-generator-typescript).",
+	"main": "index.js",
+	"directories": {
+		"test": "tests"
+	},
+	"keywords": [],
+	"author": "",
+	"license": "ISC",
+	"type": "commonjs"
 }

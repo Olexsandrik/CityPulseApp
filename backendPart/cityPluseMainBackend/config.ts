@@ -8,6 +8,7 @@ import path from "path";
 const NODE_ENV = process.env.NODE_ENV ?? "development";
 
 // Configure "dotenv"
+
 const result2 = dotenv.config({
 	path: path.join(__dirname, `./config/.env.${NODE_ENV}`),
 });
